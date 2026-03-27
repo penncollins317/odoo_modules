@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <record id="view_qiniu_backup_tree" model="ir.ui.view">
+            <field name="name">qiniu.backup.tree</field>
+            <field name="model">qiniu.backup</field>
+            <field name="arch" type="xml">
+                <tree create="0" delete="0">
+                    <field name="name"/>
+                    <field name="bucket_name"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_view_qiniu_backup" model="ir.actions.act_window">
+            <field name="name">qiniu Backup</field>
+            <field name="res_model">qiniu.backup</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_qiniu_backup_tree"/>
+        </record>
+
+        <menuitem id="menu_backup" name="Backups" parent="base.menu_custom"/>
+        <menuitem id="menu_action_qiniu_backup" action="action_view_qiniu_backup" parent="menu_backup"/>
+
+    </data>
+</odoo>

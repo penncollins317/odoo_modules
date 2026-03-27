@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Backup to qiniu oss" string="Backup to qiniu oss" name="auto_backup_qiniu">
+                        <block title="Backup" name="auto_backup_qiniu_setting_container">
+                            <setting id="auto_backup_qiniu_config">
+                                <group>
+                                    <field name="qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_access_key" required="qiniu_backup_enable"
+                                           invisible="not qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_secret_key" required="qiniu_backup_enable"
+                                           invisible="not qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_bucket" required="qiniu_backup_enable"
+                                           invisible="not qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_prefix" required="qiniu_backup_enable"
+                                           invisible=" not qiniu_backup_enable"/>
+                                </group>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
