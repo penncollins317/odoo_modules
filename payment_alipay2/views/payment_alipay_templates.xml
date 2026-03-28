@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <template id="redirect_form">
+        <t t-raw="payment_form"/>
+    </template>
+
+</odoo>
