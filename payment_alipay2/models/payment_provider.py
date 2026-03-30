@@ -30,7 +30,7 @@ class Paymentprovider(models.Model):
 
     def _get_alipay2_gateway(self):
         ctx_key = self.state
-        ctx_value = 'https://openapi-sandbox.dl.alipaydev.com/gateway.do' if ctx_key  == 'test' else 'https://openapi.alipay.com/gateway.do'
+        ctx_value = 'https://openapi-sandbox.dl.alipaydev.com/gateway.do' if ctx_key == 'test' else 'https://openapi.alipay.com/gateway.do'
         return ctx_value
 
     def _compute_feature_support_fields(self):
@@ -56,6 +56,7 @@ class Paymentprovider(models.Model):
 
     def _alipay2_make_request(self, payload: dict):
         self.ensure_one()
+        _logger.info(f"payload: {payload}")
         client = self._get_alipay2_client()
 
         model = AlipayTradePagePayModel()

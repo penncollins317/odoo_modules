@@ -5,7 +5,7 @@ import pprint
 
 from werkzeug import urls
 
-from odoo import _, models, fields
+from odoo import _, models, fields, http
 from odoo.addons.payment import utils as payment_utils
 from odoo.addons.payment_alipay2.const import TRANSACTION_STATUS_MAPPING
 from odoo.addons.payment_alipay2.controllers.main import AlipayController
@@ -55,6 +55,9 @@ class PaymentTransaction(models.Model):
         :rtype: dict
         """
         base_url = self.provider_id.get_base_url()
+        host_url = http.request.httprequest.host_url
+        _logger.info("host_url: %s", host_url)
+        _logger.info("base_url: %s", base_url)
         return_url = urls.url_join(
             base_url, AlipayController._return_url
         )
@@ -137,7 +140,7 @@ class PaymentTransaction(models.Model):
         }
 
         response_content = refund_tx.provider_id._alipay2_make_request(
-             payload
+            payload
         )
 
         _logger.info(
