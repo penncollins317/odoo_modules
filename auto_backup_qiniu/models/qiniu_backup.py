@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime, timezone, timedelta
 
 from odoo import models, fields, api
@@ -38,20 +39,32 @@ class QiniuBackup(models.Model):
         fname = "{:%Y_%m_%d_%H_%M_%S}-{}-backup.zip".format(
             datetime.now(tz), db_name)
         qiniu_backup_prefix = self.env['ir.config_parameter'].sudo().get_param("qiniu_backup_prefix", '')
-        object_Key = f'{qiniu_backup_prefix}/{fname}'
-        backup_file = db.dump_db(db_name, None)
-        try:
-            token = self._qiniu_token(object_Key)
-            res = qiniu.put_data(token, object_Key, backup_file)
-            _logger.info(f"qiniu upload res:{res}")
-            self.create({
-                'name': fname,
-                'bucket_name': self._get_bucket(),
-            })
-        except Exception as e:
-            logging.error(e)
-        finally:
-            backup_file.close()
+        backup_method = self.env['ir.config_parameter'].sudo().get_param("qiniu_backup_method")
+        if backup_method == 'local':
+            backup_path = self.env['ir.config_parameter'].sudo().get_param("qiniu_backup_local_path")
+            if not backup_path:
+                _logger.warning("qiniu local backup path not set")
+                return
+            file_path = os.path.join(backup_path, fname)
+            with open(file_path, 'wb') as f:
+                db.dump_db(db_name, f)
+            _logger.info(f'qiniu local backup success, {file_path}')
+
+        elif backup_method == 'qiniu':
+            object_Key = f'{qiniu_backup_prefix}/{fname}'
+            backup_file = db.dump_db(db_name, None)
+            try:
+                token = self._qiniu_token(object_Key)
+                res = qiniu.put_data(token, object_Key, backup_file)
+                _logger.info(f"qiniu upload res:{res}")
+                self.create({
+                    'name': fname,
+                    'bucket_name': self._get_bucket(),
+                })
+            except Exception as e:
+                logging.error(e)
+            finally:
+                backup_file.close()
 
     @api.model
     def action_backup_all(self):

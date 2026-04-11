@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
             <field name="name">res.config.settings.view.form</field>
             <field name="model">res.config.settings</field>
@@ -13,14 +12,16 @@
                             <setting id="auto_backup_qiniu_config">
                                 <group>
                                     <field name="qiniu_backup_enable"/>
-                                    <field name="qiniu_backup_access_key" required="qiniu_backup_enable"
-                                           invisible="not qiniu_backup_enable"/>
-                                    <field name="qiniu_backup_secret_key" required="qiniu_backup_enable"
-                                           invisible="not qiniu_backup_enable"/>
-                                    <field name="qiniu_backup_bucket" required="qiniu_backup_enable"
-                                           invisible="not qiniu_backup_enable"/>
-                                    <field name="qiniu_backup_prefix" required="qiniu_backup_enable"
-                                           invisible=" not qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_method" required="qiniu_backup_enable"/>
+                                    <field name="qiniu_backup_local_path" invisible="qiniu_backup_method != 'local'"/>
+                                    <field name="qiniu_backup_access_key"
+                                           invisible=" qiniu_backup_method != 'qiniu'"/>
+                                    <field name="qiniu_backup_secret_key"
+                                           invisible=" qiniu_backup_method != 'qiniu'"/>
+                                    <field name="qiniu_backup_bucket"
+                                           invisible=" qiniu_backup_method != 'qiniu'"/>
+                                    <field name="qiniu_backup_prefix"
+                                           invisible="  qiniu_backup_method != 'qiniu'"/>
                                 </group>
                             </setting>
                         </block>
