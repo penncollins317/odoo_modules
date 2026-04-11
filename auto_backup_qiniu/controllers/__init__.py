@@ -1,0 +1,1 @@
+from . import qiniu_restore_controller
